@@ -1,13 +1,9 @@
-
-
-
-
 #!/bin/bash
 
-# Το αρχείο που περιέχει τον τηλεφωνικό κατάλογο
+# The file that contains the phone directory
 FILENAME="katalogos"
 
-# Συνάρτηση που εμφανίζει τον τρόπο χρήσης του script
+# Function that displays the usage of the script
 usage() {
     echo "Usage:"
     echo "telcat -a : Add a new entry"
@@ -19,91 +15,84 @@ usage() {
     exit 1
 }
 
-# Συνάρτηση για την προσθήκη νέας εγγραφής στον κατάλογο
+# Function to add a new entry to the directory
 add_entry() {
-    # Ζητάει από τον χρήστη να εισάγει τις πληροφορίες
+    # Prompt the user to enter information
     read -p "Enter name: " name
     read -p "Enter surname: " surname
     read -p "Enter city: " city
     read -p "Enter phone: " phone
-    # Προσθέτει την νέα εγγραφή στο αρχείο
+    # Add the new entry to the file
     echo "$name $surname $city $phone" >> "$FILENAME"
     echo "Entry added."
 }
 
-# Συνάρτηση για την εμφάνιση όλων των εγγραφών του καταλόγου
+# Function to list all entries in the directory
 list_entries() {
-    # Ελέγχει αν το αρχείο υπάρχει
+    # Check if the file exists
     if [[ ! -f "$FILENAME" ]]; then
         echo "No entries found."
         return
     fi
-    # Εμφανίζει το περιεχόμενο του αρχείου
+    # Display the contents of the file
     cat "$FILENAME"
 }
 
-# Συνάρτηση για την ταξινόμηση των εγγραφών κατά συγκεκριμένη στήλη
+# Function to sort entries by a specific column
 sort_entries() {
     local column=$1
-    # Ελέγχει αν το αρχείο υπάρχει
+    # Check if the file exists
     if [[ ! -f "$FILENAME" ]]; then
         echo "No entries found."
         return
     fi
-    # Ταξινομεί το αρχείο με βάση τη συγκεκριμένη στήλη
+    # Sort the file based on the specified column
     sort -k"$column" "$FILENAME"
 }
 
-# Συνάρτηση για την αναζήτηση εγγραφών που περιέχουν μια λέξη-κλειδί
+# Function to search for entries containing a keyword
 search_entries() {
     local keyword=$1
-    # Ελέγχει αν το αρχείο υπάρχει
+    # Check if the file exists
     if [[ ! -f "$FILENAME" ]]; then
         echo "No entries found."
         return
     fi
-    # Αναζητεί και εμφανίζει εγγραφές που περιέχουν τη λέξη-κλειδί
+    # Search and display entries containing the keyword
     grep -i "$keyword" "$FILENAME" || echo "No entries found with the given keyword."
 }
 
-# Συνάρτηση για τη διαγραφή εγγραφών που περιέχουν μια λέξη-κλειδί
+# Function to delete entries containing a keyword
 delete_entries() {
     local keyword=$1
-    # Ελέγχει αν το αρχείο υπάρχει
+    # Check if the file exists
     if [[ ! -f "$FILENAME" ]]; then
         echo "No entries found."
         return
     fi
-    # Δημιουργεί ένα προσωρινό αρχείο χωρίς τις εγγραφές που περιέχουν τη λέξη-κλειδί
+    # Create a temporary file without entries containing the keyword
     grep -vi "$keyword" "$FILENAME" > "$FILENAME.tmp" && mv "$FILENAME.tmp" "$FILENAME"
     echo "Entries deleted (if any contained the keyword)."
 }
 
-# Συνάρτηση για την καταμέτρηση των εγγραφών του καταλόγου
+# Function to count the number of entries in the directory
 count_entries() {
-    # Ελέγχει αν το αρχείο υπάρχει
+    # Check if the file exists
     if [[ ! -f "$FILENAME" ]]; then
         echo "No entries found."
         return
     fi
-    # Καταμετρά και εμφανίζει τον αριθμό των εγγραφών
+    # Count and display the number of entries
     local count=$(wc -l < "$FILENAME")
     echo "Number of entries: $count"
 }
 
-# Έλεγχος των παραμέτρων εισόδου
+# Check the input parameters
 if [[ $# -lt 1 ]]; then
     usage
 fi
 
-
-
-
-
-
-
-
-# Επεξεργασία των παραμέτρων εισόδου
+# Process the input parameters
 option=$1
 
 case $option in
@@ -138,136 +127,3 @@ case $option in
         usage
         ;;
 esac
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
