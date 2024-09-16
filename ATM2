@@ -1,41 +1,39 @@
-
 #!/bin/bash
 
-# Λήψη υπολοίπου από τον χρήστη
-read -p "Παρακαλώ εισάγετε το υπόλοιπο της κάρτας σας: " balance
+# User types their balance
+read -p "Please enter your card balance: " balance
 
-# Ερώτηση για τη διαδικασία που θέλει ο πελάτης
-echo "Διαλέξτε διαδικασία:"
-echo "Υ - Ερώτηση Υπολοίπου"
-echo "Α - Ανάληψη"
-echo "Κ - Κατάθεση"
-read -p "Εισάγετε την επιλογή σας (Υ/Α/Κ): " action
+# User menu
+echo "Choose an action:"
+echo "B - Check Balance"
+echo "W - Withdraw"
+echo "D - Deposit"
+read -p "Enter your choice (B/W/D): " action
 
 case $action in
-    "Υ" | "υ")
-        # Ερώτηση Υπολοίπου
-        echo "Το υπόλοιπό σας είναι: $balance €"
+    "B" | "b")
+        # Check Balance
+        echo "Your balance is: $balance €"
         ;;
-    "Α" | "α")
-        # Ανάληψη
-        read -p "Εισάγετε το ποσό που θέλετε να αναλάβετε: " withdrawal_amount
+    "W" | "w")
+        # Withdraw
+        read -p "Enter the amount you want to withdraw: " withdrawal_amount
         if (( $(echo "$withdrawal_amount > $balance" | bc -l) )); then
-            echo "Η συναλλαγή δεν μπορεί να πραγματοποιηθεί: Το ποσό υπερβαίνει το διαθέσιμο υπόλοιπο."
+            echo "Transaction cannot be completed: The amount exceeds the available balance."
         elif (( $(echo "$withdrawal_amount > 1000" | bc -l) )); then
-            echo "Η συναλλαγή δεν μπορεί να πραγματοποιηθεί: Το ποσό υπερβαίνει το μέγιστο επιτρεπτό όριο ανάληψης (1000 €)."
+            echo "Transaction cannot be completed: The amount exceeds the maximum allowed withdrawal limit (1000 €)."
         else
             balance=$(echo "$balance - $withdrawal_amount" | bc -l)
-            echo "Η συναλλαγή ολοκληρώθηκε. Το νέο υπόλοιπό σας είναι: $balance €"
+            echo "Transaction completed. Your new balance is: $balance €"
         fi
         ;;
-    "Κ" | "κ")
-        # Κατάθεση
-        read -p "Εισάγετε το ποσό που θέλετε να καταθέσετε: " deposit_amount
+    "D" | "d")
+        # Deposit
+        read -p "Enter the amount you want to deposit: " deposit_amount
         balance=$(echo "$balance + $deposit_amount" | bc -l)
-        echo "Η συναλλαγή ολοκληρώθηκε. Το νέο υπόλοιπό σας είναι: $balance €"
+        echo "Transaction completed. Your new balance is: $balance €"
         ;;
     *)
-        echo "Άκυρη επιλογή. Παρακαλώ προσπαθήστε ξανά."
+        echo "Invalid choice. Please try again."
         ;;
 esac
-
