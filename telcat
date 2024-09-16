@@ -1,0 +1,273 @@
+
+
+
+
+#!/bin/bash
+
+# Το αρχείο που περιέχει τον τηλεφωνικό κατάλογο
+FILENAME="katalogos"
+
+# Συνάρτηση που εμφανίζει τον τρόπο χρήσης του script
+usage() {
+    echo "Usage:"
+    echo "telcat -a : Add a new entry"
+    echo "telcat -l : List all entries"
+    echo "telcat -s <column> : Sort entries by column (1: name, 2: surname, 3: city, 4: phone)"
+    echo "telcat -c <keyword> : Search entries by keyword"
+    echo "telcat -d <keyword> : Delete entries containing keyword"
+    echo "telcat -n : Count the number of entries"
+    exit 1
+}
+
+# Συνάρτηση για την προσθήκη νέας εγγραφής στον κατάλογο
+add_entry() {
+    # Ζητάει από τον χρήστη να εισάγει τις πληροφορίες
+    read -p "Enter name: " name
+    read -p "Enter surname: " surname
+    read -p "Enter city: " city
+    read -p "Enter phone: " phone
+    # Προσθέτει την νέα εγγραφή στο αρχείο
+    echo "$name $surname $city $phone" >> "$FILENAME"
+    echo "Entry added."
+}
+
+# Συνάρτηση για την εμφάνιση όλων των εγγραφών του καταλόγου
+list_entries() {
+    # Ελέγχει αν το αρχείο υπάρχει
+    if [[ ! -f "$FILENAME" ]]; then
+        echo "No entries found."
+        return
+    fi
+    # Εμφανίζει το περιεχόμενο του αρχείου
+    cat "$FILENAME"
+}
+
+# Συνάρτηση για την ταξινόμηση των εγγραφών κατά συγκεκριμένη στήλη
+sort_entries() {
+    local column=$1
+    # Ελέγχει αν το αρχείο υπάρχει
+    if [[ ! -f "$FILENAME" ]]; then
+        echo "No entries found."
+        return
+    fi
+    # Ταξινομεί το αρχείο με βάση τη συγκεκριμένη στήλη
+    sort -k"$column" "$FILENAME"
+}
+
+# Συνάρτηση για την αναζήτηση εγγραφών που περιέχουν μια λέξη-κλειδί
+search_entries() {
+    local keyword=$1
+    # Ελέγχει αν το αρχείο υπάρχει
+    if [[ ! -f "$FILENAME" ]]; then
+        echo "No entries found."
+        return
+    fi
+    # Αναζητεί και εμφανίζει εγγραφές που περιέχουν τη λέξη-κλειδί
+    grep -i "$keyword" "$FILENAME" || echo "No entries found with the given keyword."
+}
+
+# Συνάρτηση για τη διαγραφή εγγραφών που περιέχουν μια λέξη-κλειδί
+delete_entries() {
+    local keyword=$1
+    # Ελέγχει αν το αρχείο υπάρχει
+    if [[ ! -f "$FILENAME" ]]; then
+        echo "No entries found."
+        return
+    fi
+    # Δημιουργεί ένα προσωρινό αρχείο χωρίς τις εγγραφές που περιέχουν τη λέξη-κλειδί
+    grep -vi "$keyword" "$FILENAME" > "$FILENAME.tmp" && mv "$FILENAME.tmp" "$FILENAME"
+    echo "Entries deleted (if any contained the keyword)."
+}
+
+# Συνάρτηση για την καταμέτρηση των εγγραφών του καταλόγου
+count_entries() {
+    # Ελέγχει αν το αρχείο υπάρχει
+    if [[ ! -f "$FILENAME" ]]; then
+        echo "No entries found."
+        return
+    fi
+    # Καταμετρά και εμφανίζει τον αριθμό των εγγραφών
+    local count=$(wc -l < "$FILENAME")
+    echo "Number of entries: $count"
+}
+
+# Έλεγχος των παραμέτρων εισόδου
+if [[ $# -lt 1 ]]; then
+    usage
+fi
+
+
+
+
+
+
+
+
+# Επεξεργασία των παραμέτρων εισόδου
+option=$1
+
+case $option in
+    -a)
+        add_entry
+        ;;
+    -l)
+        list_entries
+        ;;
+    -s)
+        if [[ $# -ne 2 ]]; then
+            usage
+        fi
+        sort_entries "$2"
+        ;;
+    -c)
+        if [[ $# -ne 2 ]]; then
+            usage
+        fi
+        search_entries "$2"
+        ;;
+    -d)
+        if [[ $# -ne 2 ]]; then
+            usage
+        fi
+        delete_entries "$2"
+        ;;
+    -n)
+        count_entries
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
