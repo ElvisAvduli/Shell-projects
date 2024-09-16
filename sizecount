@@ -1,38 +1,36 @@
 #!/bin/bash
 
-# Έλεγχος αν ο αριθμός των ορισμάτων είναι 1
+# Check if the number of arguments is 1
 if [ "$#" -ne 1 ]; then
-    echo "Χρήση: $0 <ακέραιος αριθμός>"
+    echo "Usage: $0 <integer number>"
     exit 1
 fi
 
-# Έλεγχος αν το όρισμα είναι ακέραιος αριθμός
+# Check if the argument is an integer
 if ! [[ "$1" =~ ^[0-9]+$ ]]; then
-    echo "Το όρισμα πρέπει να είναι ακέραιος αριθμός"
+    echo "The argument must be an integer"
     exit 1
 fi
 
-# Ανάθεση της τιμής του ορίσματος στη μεταβλητή HOUR
+# Assign the value of the argument to the variable HOUR
 HOUR="$1"
 
-# Έλεγχος αν ο αριθμός είναι μεγαλύτερος του 0 και μικρότερος ή ίσος του 24
+# Check if the number is greater than 0 and less than or equal to 24
 if [ "$HOUR" -le 0 ] || [ "$HOUR" -gt 24 ]; then
-    echo "Ο αριθμός πρέπει να είναι μεγαλύτερος του 0 και μικρότερος ή ίσος του 24"
+    echo "The number must be greater than 0 and less than or equal to 24"
     exit 1
 fi
 
-# Αναζήτηση αρχείων που δημιουργήθηκαν την ώρα που δηλώνει ο αριθμός
+# Find files created at the hour specified by the number
 FILES=$(find . -type f -newermt "$(date +%Y-%m-%d) $HOUR:00:00" ! -newermt "$(date +%Y-%m-%d) $HOUR:59:59")
 
-# Έλεγχος αν βρέθηκαν αρχεία
+# Check if files were found
 if [ -z "$FILES" ]; then
-    echo "Δεν βρέθηκαν αρχεία που δημιουργήθηκαν την ώρα $HOUR"
+    echo "No files found created during the hour $HOUR"
     exit 0
 fi
 
-# Αποθήκευση των ονομάτων των αρχείων στο αρχείο timefile
+# Save the names of the files to the file timefile
 echo "$FILES" > timefile
 
-echo "Τα αρχεία αποθηκεύτηκαν στο timefile"
-
-
+echo "Files have been saved to timefile"
