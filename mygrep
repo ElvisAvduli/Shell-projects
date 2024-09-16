@@ -1,49 +1,47 @@
 #!/bin/bash
 
-# Έλεγχος αν δόθηκε όρισμα
+# Check if an argument was provided
 if [ $# -ne 1 ]; then
-    echo "Χρήση: $0 <κατάλογος>"
+    echo "Usage: $0 <directory>"
     exit 1
 fi
-
 DIR=$1
 
-# Έλεγχος αν το όρισμα είναι έγκυρος κατάλογος
+# Check if the argument is a valid directory
 if [ ! -d "$DIR" ]; then
-    echo "Το $DIR δεν είναι έγκυρος κατάλογος."
+    echo "$DIR is not a valid directory."
     exit 1
 fi
 
-# Παύση για 2 δευτερόλεπτα
+# Pause for 2 seconds
 sleep 2
 
-# Μετρητές
+# Counters
 owner_count=0
 group_count=0
 other_count=0
 
-# Λίστα αρχείων στον κατάλογο
+# List files in the directory
 FILES=$(find "$DIR" -maxdepth 1 -type f)
 
 for file in $FILES; do
-    # Έλεγχος εξουσιοδοτήσεων για τον ιδιοκτήτη
+    # Check read and write permissions for the owner
     if [ -r "$file" ] && [ -w "$file" ]; then
         ((owner_count++))
     fi
     
-    # Έλεγχος εξουσιοδοτήσεων για την ομάδα
+    # Check read and write permissions for the group
     if [ -g "$file" ] && [ -w "$file" ]; then
         ((group_count++))
     fi
     
-    # Έλεγχος αν δεν υπάρχουν εξουσιοδοτήσεις για τους υπόλοιπους
+    # Check if there are no permissions for others
     if [ ! -r "$file" ] && [ ! -w "$file" ] && [ ! -x "$file" ]; then
         ((other_count++))
     fi
 done
 
-# Εμφάνιση αποτελεσμάτων
-echo "Αρχεία με εξουσιοδοτήσεις ανάγνωσης και εγγραφής για τον ιδιοκτήτη: $owner_count"
-echo "Αρχεία με εξουσιοδοτήσεις ανάγνωσης και εγγραφής για την ομάδα: $group_count"
-echo "Αρχεία χωρίς εξουσιοδοτήσεις για τους υπόλοιπους: $other_count"
-
+# Display the results
+echo "Files with read and write permissions for the owner: $owner_count"
+echo "Files with read and write permissions for the group: $group_count"
+echo "Files with no permissions for others: $other_count"
